@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#101827">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./icon.svg" type="image/svg+xml">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Routine Quest">
+<title>My Routine Quest — Timer & Daily Reset Fixed</title>
+<style>
+:root{--bg:#0b1220;--panel:#121c2e;--panel2:#17243a;--text:#eef4ff;--muted:#9eacc4;--line:#293851;--accent:#7c9cff;--good:#4ade80;--bad:#fb7185;--gold:#fbbf24;--shadow:0 10px 30px #0003}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+body.light{--bg:#f3f6fb;--panel:#fff;--panel2:#eef3fb;--text:#152238;--muted:#607089;--line:#dbe3ef;--accent:#315fdb;--good:#14854a;--bad:#c4334e;--gold:#946200;--shadow:0 8px 24px #15223812}
+.app{max-width:850px;margin:auto;padding:16px 14px 40px}.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:4px 0 18px}.brand{display:flex;align-items:center;gap:10px}.logo{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,#7c9cff,#8b5cf6);display:grid;place-items:center;font-size:23px;box-shadow:var(--shadow)}h1{font-size:21px;margin:0} .sub{font-size:12px;color:var(--muted)}button,.btn{border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--panel2);color:var(--text);font-weight:650;cursor:pointer;font-size:13px}button:active{transform:scale(.98)}button.primary{background:var(--accent);color:white;border-color:transparent}button.good{background:var(--good);color:#062513;border-color:transparent}button.danger{color:var(--bad)}button.small{padding:7px 9px;font-size:12px}.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:15px;box-shadow:var(--shadow)}.stat-label{font-size:12px;color:var(--muted)}.stat-value{font-size:26px;font-weight:850;letter-spacing:-.7px;margin:3px 0}.stat-foot{font-size:11px;color:var(--muted)}.progress-wrap{height:8px;background:var(--line);border-radius:20px;overflow:hidden;margin-top:9px}.progress{height:100%;width:0;background:linear-gradient(90deg,var(--accent),#a78bfa);border-radius:20px;transition:width .25s}.section-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:23px 2px 10px}.section-head h2{font-size:17px;margin:0}.task-list{display:grid;gap:9px}.task{display:flex;align-items:center;gap:11px;background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:12px}.task.done{border-color:color-mix(in srgb,var(--good) 60%,var(--line))}.check{width:25px;height:25px;flex:0 0 25px;border-radius:8px;border:2px solid var(--muted);display:grid;place-items:center;background:transparent;color:white;padding:0}.task.done .check{background:var(--good);border-color:var(--good);color:#05210f}.task-main{flex:1;min-width:0}.task-name{font-weight:700;overflow-wrap:anywhere}.task-meta{font-size:11px;color:var(--muted);margin-top:3px}.task-actions{display:flex;gap:6px;align-items:center}.pill{font-size:11px;padding:4px 7px;border-radius:8px;background:var(--panel2);color:var(--muted);white-space:nowrap}.pill.positive{color:var(--good)}.pill.negative{color:var(--bad)}.timer-panel{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center}.timer-display{font-size:30px;font-weight:850;font-variant-numeric:tabular-nums}.field{background:var(--panel2);border:1px solid var(--line);color:var(--text);border-radius:10px;padding:10px;width:100%;font:inherit}.row{display:flex;gap:8px;align-items:center}.row>*{min-width:0}.muted{color:var(--muted)}.history-item{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);font-size:13px}.history-item:last-child{border-bottom:0}.xp{font-weight:800;white-space:nowrap}.xp.pos{color:var(--good)}.xp.neg{color:var(--bad)}.chart{width:100%;height:150px;display:block}.chart-legend{display:flex;justify-content:space-between;font-size:11px;color:var(--muted)}.empty{text-align:center;color:var(--muted);padding:22px 10px;font-size:13px}.bottom-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}.notice{font-size:12px;color:var(--muted);padding:10px 2px}.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--text);color:var(--bg);padding:11px 16px;border-radius:12px;font-weight:700;font-size:13px;box-shadow:var(--shadow);z-index:5;max-width:90vw;text-align:center}.hidden{display:none!important}dialog{width:min(92vw,480px);border:1px solid var(--line);border-radius:18px;background:var(--panel);color:var(--text);padding:18px;box-shadow:var(--shadow)}dialog::backdrop{background:#0009}dialog h3{margin:0 0 14px}.form-grid{display:grid;gap:10px}.label{font-size:12px;color:var(--muted);display:block;margin-bottom:4px}.footer{font-size:11px;color:var(--muted);text-align:center;margin-top:24px}
+@media(min-width:600px){.stats{grid-template-columns:repeat(4,1fr)}.app{padding:22px 20px 50px}.stat-value{font-size:29px}.task{padding:14px}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div class="brand"><div class="logo">⚔️</div><div><h1>My Routine Quest</h1><div class="sub" id="todayLabel">Build your streak, one day at a time.</div><div class="sub">Timer Completion & Daily Reset Fix · Per-task scoring</div></div></div>
+    <button id="themeBtn" aria-label="Toggle theme">☀️ Light</button>
+  </header>
+
+  <section class="stats">
+    <div class="card"><div class="stat-label">TOTAL XP</div><div class="stat-value" id="totalXP">0</div><div class="stat-foot">Your lifetime score</div></div>
+    <div class="card"><div class="stat-label">CURRENT LEVEL</div><div class="stat-value" id="level">Level 1</div><div class="stat-foot" id="levelProgressText">0 / 100 XP to next level</div><div class="progress-wrap"><div class="progress" id="levelProgress"></div></div></div>
+    <div class="card"><div class="stat-label">CURRENT STREAK</div><div class="stat-value" id="streak">🔥 0 days</div><div class="stat-foot">All active checkbox tasks done</div></div>
+    <div class="card"><div class="stat-label">TODAY'S PROGRESS</div><div class="stat-value" id="completion">0%</div><div class="stat-foot" id="completionText">0 of 0 tasks complete</div><div class="progress-wrap"><div class="progress" id="dayProgress"></div></div></div>
+  </section>
+
+  <div class="section-head"><h2>🎯 Today's quests</h2><button class="primary" id="addTaskBtn">＋ Add task</button></div>
+  <div class="task-list" id="taskList"></div>
+  <div class="notice">Each checkbox task has its own XP reward and penalty. Done adds its reward immediately; switching to Undone applies its penalty immediately. Each reward/penalty applies at most once per task per day. Timer reward: +1 XP per completed 60-minute session.</div>
+
+  <div class="section-head"><h2>⏱️ Focus timer</h2><span class="pill" id="timerState">Ready</span></div>
+  <section class="card">
+    <div class="timer-panel">
+      <div><div class="stat-label" id="timerTaskLabel">Choose a task below</div><div class="timer-display" id="timerDisplay">60:00</div><div class="stat-foot" id="timerHint">Reward is given only when the timer finishes.</div></div>
+      <div style="display:grid;gap:8px"><button class="primary" id="timerStart">Start 60 min</button><button id="timerPause" disabled>Pause</button><button class="danger" id="timerCancel" disabled>Cancel</button></div>
+    </div>
+    <div class="row" style="margin-top:12px"><label class="label" style="margin:0;min-width:92px" for="timerMinutes">Custom minutes</label><input class="field" id="timerMinutes" type="number" min="1" max="240" value="60" style="max-width:100px"><select class="field" id="timerTaskSelect" aria-label="Timer task" style="flex:1"><option value="">General study session</option></select></div>
+  </section>
+
+  <div class="section-head"><h2>📈 Last 7 days</h2><span class="pill">XP earned</span></div>
+  <section class="card"><canvas class="chart" id="xpChart" width="700" height="190" aria-label="XP chart"></canvas><div class="chart-legend"><span>Daily net XP</span><span id="chartSummary">No history yet</span></div></section>
+
+  <div class="section-head"><h2>🧾 Recent history</h2><button class="small" id="viewAllBtn">View all</button></div>
+  <section class="card" id="history"></section>
+
+  <div class="section-head"><h2>🛠️ Daily controls</h2></div>
+  <section class="card">
+    <div class="bottom-actions"><button class="good" id="settleBtn">Score today & reset</button><button id="reopenBtn" class="hidden">Reopen today</button><button id="backupBtn">Export backup</button><button id="importBtn">Import backup</button><button class="danger" id="clearBtn">Clear all data</button></div>
+    <input type="file" id="importFile" accept="application/json,.json" class="hidden">
+    <div class="notice">Score today when you're finished. This adds XP transactions to history, updates your streak, and resets the checklist for a new day. Back up regularly.</div>
+  </section>
+  <div class="footer">Private, local-first tracker • No account • No hosting • Your data stays in this browser</div>
+</div>
+
+<dialog id="taskDialog">
+  <form id="taskForm" method="dialog" class="form-grid">
+    <h3 id="dialogTitle">Add a task</h3>
+    <input type="hidden" id="editTaskId">
+    <label><span class="label">Task name</span><input class="field" id="taskName" maxlength="70" required placeholder="e.g. Java practice"></label>
+    <label><span class="label">Task type</span><select class="field" id="taskType"><option value="checkbox">Checkbox task (+10 / −5 XP)</option><option value="timer">Timer task (timer completion XP)</option></select></label>
+    <div class="row">
+      <label style="flex:1"><span class="label">XP for Done</span><input class="field" id="taskReward" type="number" min="0" max="10000" value="10" required></label>
+      <label style="flex:1"><span class="label">XP penalty if Undone</span><input class="field" id="taskPenalty" type="number" min="0" max="10000" value="5" required></label>
+    </div>
+    <label><span class="label">Timer default minutes</span><input class="field" id="taskDuration" type="number" min="1" max="240" value="60"></label>
+    <div class="row" style="justify-content:flex-end;margin-top:6px"><button type="button" id="dialogCancel">Cancel</button><button class="primary" type="submit">Save task</button></div>
+  </form>
+</dialog>
+<dialog id="historyDialog"><h3>Full XP history</h3><div id="allHistory" style="max-height:55vh;overflow:auto"></div><div class="row" style="justify-content:flex-end;margin-top:12px"><button id="historyClose">Close</button></div></dialog>
+<div id="toast" class="toast hidden" role="status"></div>
+
+<script>
+(() => {
+'use strict';
+const KEY='routineQuest.v1';
+const XP_DONE=10, XP_MISSED=-5, XP_TIMER=1, XP_PER_LEVEL=100;
+const $=id=>document.getElementById(id);
+const todayKey=()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
+const dateOffset=(n)=>{const d=new Date();d.setHours(12,0,0,0);d.setDate(d.getDate()+n);return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
+const prettyDate=k=>{if(!k)return '';const [y,m,d]=k.split('-').map(Number);return new Date(y,m-1,d,12).toLocaleDateString(undefined,{day:'numeric',month:'short',year:'numeric'})};
+const uid=()=>Math.random().toString(36).slice(2,10)+Date.now().toString(36).slice(-4);
+const defaultTasks=[
+{id:uid(),name:'Study / Deep Work',type:'checkbox',duration:60,rewardXP:10,penaltyXP:5,active:true,done:false,settledDate:null},
+{id:uid(),name:'Exercise',type:'checkbox',duration:30,rewardXP:10,penaltyXP:5,active:true,done:false,settledDate:null},
+{id:uid(),name:'English Speaking Practice',type:'checkbox',duration:30,rewardXP:10,penaltyXP:5,active:true,done:false,settledDate:null},
+{id:uid(),name:'Cybersecurity / CTF Practice',type:'checkbox',duration:60,rewardXP:10,penaltyXP:5,active:true,done:false,settledDate:null},
+{id:uid(),name:'Read / Review Notes',type:'checkbox',duration:30,rewardXP:10,penaltyXP:5,active:true,done:false,settledDate:null},
+{id:uid(),name:'Plan Tomorrow',type:'checkbox',duration:10,rewardXP:10,penaltyXP:5,active:true,done:false,settledDate:null}
+];
+let state={version:1,tasks:defaultTasks,history:[],streak:0,lastStreakDate:null,lastSettledDate:null,theme:'dark',lastSeenDate:todayKey(),timer:{running:false,paused:false,endsAt:null,remainingMs:3600000,taskId:null,minutes:60}};
+let timerInterval=null,toastTimeout=null,showAll=false;
+function load(){try{const raw=localStorage.getItem(KEY);if(raw){const parsed=JSON.parse(raw);if(parsed&&parsed.version===1){state={...state,...parsed};if(!Array.isArray(state.tasks))state.tasks=defaultTasks;if(!Array.isArray(state.history))state.history=[];if(!state.timer)state.timer={running:false,paused:false,endsAt:null,remainingMs:3600000,taskId:null,minutes:60};}}}catch(e){console.warn('Could not load saved data',e)}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state));return true}catch(e){toast('Could not save. Export a backup and free browser storage.');return false}}
+function toast(msg){$('toast').textContent=msg;$('toast').classList.remove('hidden');clearTimeout(toastTimeout);toastTimeout=setTimeout(()=>$('toast').classList.add('hidden'),2600)}
+function totalXP(){return state.history.reduce((s,e)=>s+(Number(e.xp)||0),0)}
+function addEvent({date=todayKey(),task='General',taskId=null,status='',type='Event',xp=0,minutes=0,note=''}){state.history.push({id:uid(),date,time:new Date().toISOString(),task,taskId,status,type,xp:Number(xp),minutes:Number(minutes),note});}
+function taskHistoryScore(t,date){
+ const scoreTypes=new Set(['Daily Task Reward','Daily Task Penalty','Task Score Adjustment']);
+ return state.history.filter(e=>e.date===date&&scoreTypes.has(e.type)&&
+   (e.taskId===t.id || (!e.taskId&&e.task===t.name))).reduce((sum,e)=>sum+(Number(e.xp)||0),0);
+}
+function getTaskScore(t,date=todayKey()){
+ if(t.scoreDate===date)return Number(t.scoredXP)||0;
+ return taskHistoryScore(t,date);
+}
+function hasTaskScoreEvents(t,date){
+ const scoreTypes=new Set(['Daily Task Reward','Daily Task Penalty','Task Score Adjustment']);
+ return state.history.some(e=>e.date===date&&scoreTypes.has(e.type)&&
+   (e.taskId===t.id || (!e.taskId&&e.task===t.name)));
+}
+function scoreTaskToStatus(t,date,done,note){
+ const current=getTaskScore(t,date);
+ const target=done?Math.max(0,Number(t.rewardXP??10)):-Math.abs(Number(t.penaltyXP??5));
+ const delta=target-current;
+ t.scoreDate=date;t.scoredXP=target;
+ addEvent({date,task:t.name,taskId:t.id,status:done?'Done':'Undone',type:'Task Score Adjustment',xp:delta,note});
+ return {delta,target,current};
+}
+function dateShift(date,n){
+ const [y,m,d]=date.split('-').map(Number);const dt=new Date(y,m-1,d,12,0,0,0);dt.setDate(dt.getDate()+n);
+ return `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')}`;
+}
+function dayEvents(date){return state.history.filter(e=>e.date===date)}
+function activeCheckboxTasks(){return state.tasks.filter(t=>t.active&&t.type==='checkbox')}
+function dailyScored(date){
+ let lastStatus=null;
+ for(const e of state.history){
+   if(e.date===date&&(e.type==='Daily Settlement Complete'||e.type==='Daily Settlement Reopened'))lastStatus=e.type;
+ }
+ return lastStatus==='Daily Settlement Complete';
+}
+// If the user returns on a later date, settle missed days as missed rather than silently erasing them.
+function handleDateChange(){
+ const today=todayKey();
+ if(state.lastSeenDate!==today){
+   const old=state.lastSeenDate;
+   if(old&&!dailyScored(old))settleDate(old,true);
+   state.tasks.forEach(t=>{if(t.type==='checkbox'){t.done=false;t.settledDate=null}});
+   state.lastSeenDate=today;
+   // A previous day's settlement should not block today's checklist.
+   save();return true;
+ }
+ return false;
+}
+function settleDate(date,automatic=false){
+ if(dailyScored(date))return false;
+ state.settlementDate=date;
+ state.streakBeforeSettlement=state.streak;
+ state.lastStreakDateBeforeSettlement=state.lastStreakDate;
+ const tasks=activeCheckboxTasks();
+ if(!tasks.length){
+   state.streak=0;state.lastStreakDate=date;
+   addEvent({date,task:'Daily settlement',status:'Complete',type:'Daily Settlement Complete',xp:0,note:'No active checkbox tasks'});
+   if(date===todayKey())state.lastSettledDate=date;
+   save();return true;
+ }
+ let allDone=true;
+ tasks.forEach(t=>{
+   // When returning after a date change, saved checkbox states belong to state.lastSeenDate.
+   const done=(date===todayKey()||date===state.lastSeenDate)?!!t.done:false;
+   scoreTaskToStatus(t,date,done,automatic?'Automatic settlement on next app open':'Daily settlement');
+   if(!done)allDone=false;
+   if(date===todayKey())t.settledDate=date;
+ });
+ if(allDone){
+   if(state.lastStreakDate===dateShift(date,-1))state.streak+=1;
+   else if(state.lastStreakDate!==date)state.streak=1;
+ }else state.streak=0;
+ state.lastStreakDate=date;
+ if(date===todayKey())state.lastSettledDate=date;
+ addEvent({date,task:'Daily settlement',status:'Complete',type:'Daily Settlement Complete',xp:0,note:automatic?'Automatic daily settlement':'Manual daily settlement'});
+ save();return true;
+}
+function render(){
+ const today=todayKey();$('todayLabel').textContent=new Date().toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric'});
+ const xp=totalXP(),level=Math.floor(Math.max(0,xp)/XP_PER_LEVEL)+1,progress=((Math.max(0,xp)%XP_PER_LEVEL)/XP_PER_LEVEL)*100;
+ $('totalXP').textContent=xp;$('level').textContent='Level '+level;$('levelProgressText').textContent=`${Math.max(0,xp)%XP_PER_LEVEL} / ${XP_PER_LEVEL} XP to next level`;$('levelProgress').style.width=progress+'%';
+ $('streak').textContent=`🔥 ${state.streak} ${state.streak===1?'day':'days'}`;
+ const tasks=state.tasks.filter(t=>t.active&&t.type==='checkbox'),done=tasks.filter(t=>t.done).length,pc=tasks.length?Math.round(done/tasks.length*100):0;
+ $('completion').textContent=pc+'%';$('completionText').textContent=`${done} of ${tasks.length} checkbox tasks complete`;$('dayProgress').style.width=pc+'%';
+ $('reopenBtn').classList.toggle('hidden',!(state.lastSettledDate===today||dailyScored(today)));
+ renderTasks();renderTimerOptions();renderTimer();renderHistory();drawChart();applyTheme();
+}
+function renderTasks(){
+ const list=$('taskList');list.innerHTML='';
+ const active=state.tasks.filter(t=>t.active);
+ if(!active.length){list.innerHTML='<div class="card empty">No active tasks yet. Tap “Add task” to begin.</div>';return}
+ active.forEach(t=>{
+  const el=document.createElement('div');el.className='task'+(t.type==='checkbox'&&t.done?' done':'');
+  const check=document.createElement('button');check.className='check';check.setAttribute('aria-label',t.done?'Mark undone':'Mark done');check.textContent=t.type==='checkbox'?(t.done?'✓':''):'⏱';check.disabled=t.type!=='checkbox';
+  if(t.type==='checkbox')check.addEventListener('click',()=>toggleTask(t.id));
+  const main=document.createElement('div');main.className='task-main';
+  const name=document.createElement('div');name.className='task-name';name.textContent=t.name;
+  const meta=document.createElement('div');meta.className='task-meta';meta.textContent=t.type==='checkbox'
+   ? `Done +${Number(t.rewardXP??10)} XP • Undo −${Math.abs(Number(t.penaltyXP??5))} XP • ${state.lastSettledDate===todayKey()?'Day settled':`Today score: ${getTaskScore(t)>=0?'+':''}${getTaskScore(t)} XP`}`
+   : 'Timer quest • '+t.duration+' min default';
+  main.append(name,meta);
+  const pill=document.createElement('span');pill.className='pill '+(t.type==='checkbox'?(t.done?'positive':''):'');pill.textContent=t.type==='checkbox'?(t.done?'Done':'Undone'):'Timer';
+  const statusBtn=document.createElement('button');
+  statusBtn.className='small '+(t.done?'danger':'good');
+  statusBtn.textContent=t.type==='checkbox'?(t.done?'Undo':'Done'):'Timer';
+  statusBtn.setAttribute('aria-label',t.done?'Mark task undone':'Mark task done');
+  if(t.type==='checkbox')statusBtn.addEventListener('click',()=>toggleTask(t.id));
+  else statusBtn.addEventListener('click',()=>{ $('timerTaskSelect').value=t.id; $('timerMinutes').value=t.duration; renderTimerOptions(); $('timerTaskSelect').value=t.id; $('timerMinutes').value=t.duration; $('timerTaskLabel').textContent=t.name; $('timerMinutes').scrollIntoView({behavior:'smooth',block:'center'}); });
+  const edit=document.createElement('button');edit.className='small';edit.textContent='Edit';edit.addEventListener('click',()=>openTaskDialog(t));
+  const del=document.createElement('button');del.className='small danger';del.textContent='×';del.setAttribute('aria-label','Delete task');del.addEventListener('click',()=>deleteTask(t.id));
+  const actions=document.createElement('div');actions.className='task-actions';actions.append(pill,statusBtn,edit,del);
+  el.append(check,main,actions);list.append(el);
+ });
+}
+function toggleTask(id){
+ const t=state.tasks.find(x=>x.id===id);if(!t||t.type!=='checkbox')return;
+ const today=todayKey();
+ if(state.lastSettledDate===today||t.settledDate===today){toast('Today is already scored. Start a new day to change tasks.');return}
+ const nextDone=!t.done;
+ const result=scoreTaskToStatus(t,today,nextDone,nextDone?'Task marked Done':'Task marked Undone');
+ t.done=nextDone;
+ save();render();
+ const deltaText=(result.delta>0?'+':'')+result.delta;
+ const targetText=(result.target>0?'+':'')+result.target;
+ toast(`${nextDone?'Done':'Undo'}: ${deltaText} XP adjustment. Task score is now ${targetText} XP.`);
+}
+function openTaskDialog(t=null){$('taskDialog').dataset.edit=t?'1':'0';$('dialogTitle').textContent=t?'Edit task':'Add a task';$('editTaskId').value=t?t.id:'';$('taskName').value=t?t.name:'';$('taskType').value=t?t.type:'checkbox';$('taskDuration').value=t?t.duration:60;$('taskReward').value=t?Number(t.rewardXP??10):10;$('taskPenalty').value=t?Number(t.penaltyXP??5):5;$('taskDialog').showModal()}
+function deleteTask(id){const t=state.tasks.find(x=>x.id===id);if(!t)return;if(!confirm(`Remove "${t.name}" from your active routine? Past history will remain.`))return;t.active=false;save();render();toast('Task removed. Historical XP remains.')}
+function renderTimerOptions(){const sel=$('timerTaskSelect'),old=sel.value;sel.innerHTML='<option value="">General study session</option>';state.tasks.filter(t=>t.active).forEach(t=>{const o=document.createElement('option');o.value=t.id;o.textContent=t.name;sel.append(o)});if([...sel.options].some(o=>o.value===old))sel.value=old}
+function timerLabel(){const t=state.tasks.find(x=>x.id===state.timer.taskId);$('timerTaskLabel').textContent=t?t.name:'General study session'}
+function timerRemaining(){return state.timer.running?Math.max(0,state.timer.endsAt-Date.now()):Math.max(0,state.timer.remainingMs||0)}
+function formatMs(ms){const s=Math.ceil(ms/1000);return `${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`}
+function renderTimer(){
+ const tm=state.timer,rem=timerRemaining();$('timerDisplay').textContent=formatMs(rem);timerLabel();
+ $('timerState').textContent=tm.running?'Running':tm.paused?'Paused':'Ready';
+ $('timerStart').textContent=tm.paused?'Resume':(tm.running?'Running…':`Start ${Number($('timerMinutes').value)||60} min`);
+ $('timerStart').disabled=tm.running;$('timerPause').disabled=!tm.running;$('timerCancel').disabled=(!tm.running&&!tm.paused);
+ $('timerHint').textContent=tm.running?'Stay focused. Keep this page open for the most reliable timer.':tm.paused?'Timer paused. Resume when ready.':'Reward is given only when the timer finishes.';
+}
+function startTimer(){if(state.timer.running)return;const minutes=state.timer.paused?null:Number($('timerMinutes').value);if(state.timer.paused){state.timer.endsAt=Date.now()+state.timer.remainingMs;state.timer.running=true;state.timer.paused=false}else{if(!Number.isFinite(minutes)||minutes<1||minutes>240){toast('Choose 1–240 minutes.');return}state.timer={running:true,paused:false,endsAt:Date.now()+minutes*60000,remainingMs:minutes*60000,taskId:$('timerTaskSelect').value||null,minutes};}
+ save();renderTimer();if(timerInterval)clearInterval(timerInterval);timerInterval=setInterval(tickTimer,250);toast('Timer started. You’ve got this!')}
+function tickTimer(){
+ if(!state.timer.running)return;
+ const rem=timerRemaining();
+ if(rem<=0){
+   if(timerInterval){clearInterval(timerInterval);timerInterval=null;}
+   const completed={...state.timer};
+   // Reset running state before logging so duplicate ticks cannot grant duplicate XP.
+   state.timer={running:false,paused:false,endsAt:null,remainingMs:3600000,taskId:null,minutes:60};
+   const t=state.tasks.find(x=>x.id===completed.taskId);
+   addEvent({task:t?t.name:'General study session',taskId:t?t.id:null,status:'Completed',type:'Timer Reward',xp:XP_TIMER,minutes:completed.minutes,note:'Timer reached zero'});
+   save();render();renderTimer();toast('+1 XP earned! Timer completed.');
+   if(typeof navigator!=='undefined'&&typeof navigator.vibrate==='function')navigator.vibrate([150,80,150]);
+   return;
+ }
+ renderTimer();
+}
+function pauseTimer(){if(!state.timer.running)return;state.timer.remainingMs=timerRemaining();state.timer.running=false;state.timer.paused=true;state.timer.endsAt=null;if(timerInterval)clearInterval(timerInterval);timerInterval=null;save();renderTimer()}
+function cancelTimer(){if(!state.timer.running&&!state.timer.paused)return;if(!confirm('Cancel this timer? No XP will be awarded.'))return;if(timerInterval)clearInterval(timerInterval);timerInterval=null;state.timer={running:false,paused:false,endsAt:null,remainingMs:3600000,taskId:null,minutes:60};save();renderTimer();toast('Timer cancelled; no XP awarded.')}
+function settleToday(){const today=todayKey();if(state.lastSettledDate===today||dailyScored(today)){toast('Today has already been scored.');return}if(!confirm('Finalize today based on each task’s current status and its own XP settings? Done tasks receive their configured reward; Undone tasks receive their configured penalty. The checklist then resets.'))return;settleDate(today,false);state.lastSettledDate=today;state.tasks.forEach(t=>{if(t.type==='checkbox'){t.done=false;t.settledDate=today}});save();render();toast('Day scored. History saved and checklist reset.')}
+function reopenToday(){
+ const today=todayKey();
+ if(state.lastSettledDate!==today&&!dailyScored(today)){toast('Today has not been scored yet.');return}
+ if(!confirm('Reopen today’s checklist? The history will be preserved, task statuses restored from the latest score events, and you can update the tasks again.'))return;
+ if(state.settlementDate===today&&state.streakBeforeSettlement!==undefined){
+   state.streak=Number(state.streakBeforeSettlement)||0;
+   state.lastStreakDate=state.lastStreakDateBeforeSettlement||null;
+ }else{
+   // Safe fallback for settlements made by earlier versions.
+   state.streak=0;
+   state.lastStreakDate=dateShift(today,-1);
+ }
+ state.tasks.filter(t=>t.type==='checkbox').forEach(t=>{
+   const relevant=state.history.filter(e=>e.date===today&&
+     (e.type==='Task Score Adjustment'||e.type==='Daily Task Reward'||e.type==='Daily Task Penalty')&&
+     (e.taskId===t.id||(!e.taskId&&e.task===t.name)));
+   const latest=relevant.length?relevant[relevant.length-1]:null;
+   if(latest)t.done=latest.status==='Done';
+   t.settledDate=null;
+ });
+ state.lastSettledDate=null;
+ addEvent({date:today,task:'Daily settlement',status:'Reopened',type:'Daily Settlement Reopened',xp:0,note:'Checklist reopened by user'});
+ save();render();toast('Today reopened. XP history preserved; Done/Undo is enabled again.');
+}
+function renderHistory(){const host=$('history');const entries=[...state.history].reverse().slice(0,showAll?100:5);host.innerHTML='';if(!entries.length){host.innerHTML='<div class="empty">Your XP history will appear here after your first timer reward or daily settlement.</div>';return}entries.forEach(e=>host.append(historyRow(e)))}
+function historyRow(e){const row=document.createElement('div');row.className='history-item';const left=document.createElement('div');const title=document.createElement('div');title.style.fontWeight='700';title.textContent=e.task;const sub=document.createElement('div');sub.className='muted';sub.style.fontSize='11px';sub.textContent=`${prettyDate(e.date)} · ${e.type}`;left.append(title,sub);const right=document.createElement('div');right.className='xp '+(e.xp>0?'pos':e.xp<0?'neg':'');right.textContent=(e.xp>0?'+':'')+e.xp+' XP';row.append(left,right);return row}
+function drawChart(){const c=$('xpChart'),ctx=c.getContext('2d');const dpr=window.devicePixelRatio||1,w=c.clientWidth||700,h=150;c.width=w*dpr;c.height=h*dpr;ctx.scale(dpr,dpr);ctx.clearRect(0,0,w,h);const labels=[],values=[];for(let i=6;i>=0;i--){const date=dateOffset(-i);labels.push(date);values.push(dayEvents(date).reduce((s,e)=>s+e.xp,0))}const max=Math.max(10,...values.map(v=>Math.abs(v))),pad={l:28,r:8,t:12,b:25},plotW=w-pad.l-pad.r,plotH=h-pad.t-pad.b;const css=getComputedStyle(document.body),muted=css.getPropertyValue('--muted'),line=css.getPropertyValue('--line'),accent=css.getPropertyValue('--accent'),good=css.getPropertyValue('--good'),bad=css.getPropertyValue('--bad');ctx.font='10px system-ui';ctx.strokeStyle=line;ctx.fillStyle=muted;ctx.lineWidth=1;for(let j=0;j<3;j++){let y=pad.t+plotH*j/2;ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(w-pad.r,y);ctx.stroke()}const zeroY=pad.t+plotH/2;ctx.beginPath();ctx.moveTo(pad.l,zeroY);ctx.lineTo(w-pad.r,zeroY);ctx.stroke();const slot=plotW/7,bw=Math.min(24,slot*.48);values.forEach((v,i)=>{const x=pad.l+slot*i+slot/2-bw/2;const barH=Math.abs(v)/max*(plotH*.45);ctx.fillStyle=v>=0?good:bad;ctx.beginPath();if(v>=0)ctx.roundRect(x,zeroY-barH,bw,Math.max(2,barH),4);else ctx.roundRect(x,zeroY,bw,Math.max(2,barH),4);ctx.fill();ctx.fillStyle=muted;ctx.textAlign='center';ctx.fillText(labels[i].slice(5),x+bw/2,h-7);if(v!==0){ctx.fillStyle=css.getPropertyValue('--text');ctx.fillText(String(v),x+bw/2,v>=0?Math.max(9,zeroY-barH-4):Math.min(h-20,zeroY+barH+11))}});$('chartSummary').textContent=`7-day net: ${values.reduce((a,b)=>a+b,0)} XP`}
+function applyTheme(){document.body.classList.toggle('light',state.theme==='light');$('themeBtn').textContent=state.theme==='dark'?'☀️ Light':'🌙 Dark'}
+function exportBackup(){const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=`routine-quest-backup-${todayKey()}.json`;document.body.append(a);a.click();a.remove();URL.revokeObjectURL(url);toast('Backup exported. Keep the file somewhere safe.')}
+function importBackup(file){const reader=new FileReader();reader.onload=()=>{try{const parsed=JSON.parse(reader.result);if(parsed.version!==1||!Array.isArray(parsed.tasks)||!Array.isArray(parsed.history))throw new Error('Invalid backup');if(!confirm('Importing replaces the current tracker data. Export your current backup first if needed. Continue?'))return;state=parsed;save();render();toast('Backup imported.')}catch(e){toast('That backup file is invalid. Nothing changed.')}};reader.readAsText(file)}
+function clearAll(){if(!confirm('Delete ALL tasks, XP history, level progress and streak from this browser? Export a backup first if unsure.'))return;if(!confirm('Final check: this cannot be undone unless you have a backup. Delete everything?'))return;localStorage.removeItem(KEY);if(timerInterval)clearInterval(timerInterval);state={version:1,tasks:defaultTasks.map(t=>({...t,id:uid()})),history:[],streak:0,lastStreakDate:null,lastSettledDate:null,theme:'dark',lastSeenDate:todayKey(),timer:{running:false,paused:false,endsAt:null,remainingMs:3600000,taskId:null,minutes:60}};save();render();toast('Tracker reset. Fresh start!')}
+$('themeBtn').addEventListener('click',()=>{state.theme=state.theme==='dark'?'light':'dark';save();render()});
+$('addTaskBtn').addEventListener('click',()=>openTaskDialog());
+$('dialogCancel').addEventListener('click',()=>$('taskDialog').close());
+$('taskType').addEventListener('change',()=>{$('taskDuration').disabled=$('taskType').value!=='timer'});
+$('taskForm').addEventListener('submit',e=>{
+ e.preventDefault();const name=$('taskName').value.trim();if(!name)return;
+ const id=$('editTaskId').value,type=$('taskType').value,
+ duration=Math.max(1,Math.min(240,Number($('taskDuration').value)||60)),
+ rewardXP=Math.max(0,Number($('taskReward').value)||0),
+ penaltyXP=Math.max(0,Number($('taskPenalty').value)||0);
+ if(id){
+   const t=state.tasks.find(x=>x.id===id);
+   if(t){
+     const today=todayKey();
+     const hadScoreToday=t.scoreDate===today||hasTaskScoreEvents(t,today);
+     const previousScore=getTaskScore(t,today);
+     // Preserve any legacy ledger score before changing the task name.
+     if(hadScoreToday){t.scoreDate=today;t.scoredXP=previousScore;}
+     t.name=name;t.type=type;t.duration=duration;t.rewardXP=rewardXP;t.penaltyXP=penaltyXP;
+     if(type!=='checkbox')t.done=false;
+     if(type==='checkbox'&&hadScoreToday&&state.lastSettledDate!==today&&t.settledDate!==today){
+       scoreTaskToStatus(t,today,t.done,'Task point settings updated');
+     }
+   }
+ }else{
+   state.tasks.push({id:uid(),name,type,duration,rewardXP,penaltyXP,active:true,done:false,settledDate:null,scoreDate:null,scoredXP:0});
+ }
+ save();$('taskDialog').close();render();toast(id?'Task updated.':'Task added.');
+});
+$('timerStart').addEventListener('click',startTimer);$('timerPause').addEventListener('click',pauseTimer);$('timerCancel').addEventListener('click',cancelTimer);
+$('timerMinutes').addEventListener('input',()=>{if(!state.timer.running&&!state.timer.paused)renderTimer()});
+$('timerTaskSelect').addEventListener('change',()=>{if(!state.timer.running&&!state.timer.paused){state.timer.taskId=$('timerTaskSelect').value||null;timerLabel()}});
+$('settleBtn').addEventListener('click',settleToday);$('reopenBtn').addEventListener('click',reopenToday);$('backupBtn').addEventListener('click',exportBackup);$('importBtn').addEventListener('click',()=>$('importFile').click());$('importFile').addEventListener('change',e=>{if(e.target.files[0])importBackup(e.target.files[0]);e.target.value=''});$('clearBtn').addEventListener('click',clearAll);
+$('viewAllBtn').addEventListener('click',()=>{$('allHistory').innerHTML='';const entries=[...state.history].reverse();if(!entries.length)$('allHistory').innerHTML='<div class="empty">No history yet.</div>';else entries.forEach(e=>$('allHistory').append(historyRow(e)));$('historyDialog').showModal()});$('historyClose').addEventListener('click',()=>$('historyDialog').close());
+window.addEventListener('resize',drawChart);
+document.addEventListener('visibilitychange',()=>{
+ if(!document.hidden){
+   if(handleDateChange()){render();toast('New day detected. Yesterday was saved and today’s checklist has reset.');}
+   if(state.timer.running)tickTimer();
+ }
+});
+window.addEventListener('focus',()=>{
+ if(handleDateChange()){render();toast('New day detected. Yesterday was saved and today’s checklist has reset.');}
+ if(state.timer.running)tickTimer();
+});
+// Reset the daily checklist shortly after midnight even if this page remains open.
+setInterval(()=>{
+ if(handleDateChange()){render();toast('New day detected. Yesterday was saved and today’s checklist has reset.');}
+ if(state.timer.running)tickTimer();
+},15000);
+load();
+// Migrate saved tasks from earlier builds. Existing ledger entries remain intact.
+state.tasks.forEach(t=>{
+ if(t.rewardXP===undefined)t.rewardXP=10;
+ if(t.penaltyXP===undefined)t.penaltyXP=5;
+ if(t.scoreDate===undefined)t.scoreDate=null;
+ if(t.scoredXP===undefined)t.scoredXP=0;
+ // Existing checked tasks from an older build may have no ledger transaction in edge cases.
+ if(t.active&&t.type==='checkbox'&&t.done&&t.scoreDate!==todayKey()){
+   const oldScore=taskHistoryScore(t,todayKey());
+   if(oldScore===0 && !state.history.some(e=>e.date===todayKey()&&e.task===t.name&&e.type==='Daily Task Reward')){
+     addEvent({date:todayKey(),task:t.name,taskId:t.id,status:'Done',type:'Task Score Adjustment',xp:Number(t.rewardXP),note:'Migration: preserve already-checked task score'});
+     t.scoreDate=todayKey();t.scoredXP=Number(t.rewardXP);
+   }else if(oldScore!==0){
+     t.scoreDate=todayKey();t.scoredXP=oldScore;
+   }
+ }
+});
+save();handleDateChange();render();renderTimer();if(state.timer.running){if(state.timer.endsAt<=Date.now())tickTimer();else{timerInterval=setInterval(tickTimer,250)}}if(state.timer.paused){renderTimer()}
+})();
+</script>
+<script>
+if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+ window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(err=>console.warn('Offline cache setup failed',err)));
+}
+</script></body>
+</html>
